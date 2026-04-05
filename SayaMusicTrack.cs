@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace TP_MODUL6_103022400139
 {
@@ -14,8 +15,10 @@ namespace TP_MODUL6_103022400139
 
         public SayaMusicTrack(string title)
         {
-            Random rand = new Random();
+            Debug.Assert(title != null, "Title tidak boleh null");
+            Debug.Assert(title.Length <= 100, "Title maksimal 100 karakter");
 
+            Random rand = new Random();
             this.id = rand.Next(10000, 99999);
             this.title = title;
             this.playCount = 0;
@@ -23,7 +26,19 @@ namespace TP_MODUL6_103022400139
 
         public void IncreasePlayCount(int count)
         {
-            playCount += count;
+            Debug.Assert(count <= 10000000, "Penambahan play count maksimal 10.000.000");
+
+            try
+            {
+                checked
+                {
+                    playCount += count;
+                }
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Error: Play count melebihi batas integer!");
+            }
         }
 
         public void PrintTrackDetails()
